@@ -1,0 +1,13 @@
+To Do
+
+- Updates
+
+- bootstrap css
+- role-based css
+
+- REST simulated both ways
+  - user types in url - goes to index.html with the correct initiation
+  - internal nav forces url to change
+  - ?cookie crumbs (not unleass requested in design)
+  
+  

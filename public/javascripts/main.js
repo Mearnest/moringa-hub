@@ -1,7 +1,13 @@
 $(function() {
   
     //globals
+    
+    //current json objects
     var currUserSet = {};
+    var currStudy = {};    
+    var currResults = {};
+    var currUpdateSet = {};
+    
     
     $(document).ready(function() { 
         requestContent("home");        
@@ -78,9 +84,11 @@ $(function() {
     createContent["study"] = function(study) {
         
         var c = [];
+        
+        currStudy = study;
 
         //NAV
-        c.push("<input type='button' id='goHome' value='go home'></input>");
+        c.push("<input type='button' id='goHome' value='home'></input>");
         c.push("<input type='button' id='makeUserProfile' value='user profiles'></input>");
         c.push("<input type='button' id='makeUpdates' value='updates'></input>");
         c.push("<input type='button' id='makeResults' value='results'></input>");
@@ -98,15 +106,32 @@ $(function() {
         
     };
     
-    createContent["updates"] = function(study) {
+    createContent["updates"] = function(updateSet) {
+
+        currUpdateSet = updateSet;
         
         var c = [];
 
+        
         //NAV
-        c.push("<input type='button' id='goHome' value='go home'></input>");        
+        c.push("<input type='button' id='goHome' value='home'></input>");       
+        c.push("<input type='button' id='makeStudy' value='study'></input>");
+        
         //BODY
         c.push("<br/><br/>");
-        c.push("Updates");
+        c.push("<div>Updates</div>");
+        
+        
+        
+        for(var i = 0; i <updateSet.updates.length; i++) {
+            c.push("<br/><br/>");
+            
+            c.push("<img src='/images/" +  updateSet.updates[i].photo + "'></img>");
+            c.push("<div>" + updateSet.updates[i].subject + "</div>");
+            c.push("<div>" + updateSet.updates[i].date + "</div>");
+            c.push("<div>" + updateSet.updates[i].desc + "</div>");
+        }
+        
         
         $(".container").html(c.join(''));        
 
@@ -114,16 +139,36 @@ $(function() {
     };    
         
         
-    createContent["results"] = function(study) {
+    createContent["results"] = function(results) {
 
+        currResults = results;
+        
         var c = [];
 
         //NAV
-        c.push("<input type='button' id='goHome' value='go home'></input>"); 
+        c.push("<input type='button' id='goHome' value='home'></input>");
+        c.push("<input type='button' id='makeStudy' value='study'></input>");
                 
         //BODY
+        c.push("<div>Results</div>");
+        
         c.push("<br/><br/>");
-        c.push("Results");
+        c.push("<div>" + results.desc + "</div>");
+        
+        for(var i = 0; i < results.photos.length; i++) {
+            c.push("<img src='/images/" +  results.photos[i] + "'></img>");
+        }
+        
+        for(var i = 0; i < results.comments.length; i++) {
+            c.push("<br/><br/>");
+            c.push("<div>" + results.comments[i].subject + "</div>");
+            c.push("<div>" + results.comments[i].userName + "</div>");
+            c.push("<div>" + results.comments[i].date + "</div>");
+            c.push("<div>" + results.comments[i].text + "</div>");
+            
+        }        
+        
+        
         
         $(".container").html(c.join(''));        
 
@@ -142,7 +187,8 @@ $(function() {
         var c = [];
         
         //NAV
-        c.push("<input type='button' id='goHome' value='go home'></input>");
+        c.push("<input type='button' id='goHome' value='home'></input>");
+        c.push("<input type='button' id='makeStudy' value='study'></input>");
         
         //check the type of data to determine which content is needed
         if(typeof(userSet) === "string") {
@@ -151,7 +197,7 @@ $(function() {
 //console.log("idx", idx, currUserSet);
             
             //NAV
-            c.push("<input type='button' id='goToUsers' value='go to users'></input>");
+            c.push("<input type='button' id='goToUsers' value='users'></input>");
             
             c.push("<br/><br/>");
             c.push("<img src='/images/" +  currUserSet.userProfiles[idx].photo + "'></img>");
