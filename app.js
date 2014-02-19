@@ -9,6 +9,8 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
+var tempData = require('./public/javascripts/createBaseJsonData.js');
+
 var app = express();
 
 // all environments
@@ -36,12 +38,27 @@ app.get('/users', user.list);
 
 app.get('/home', function(req, res) {
     //NOTE - this will come from db
-    res.send('{"header":"Moringa Hub Prototype","subHeader":"This is the main body</h4>","bigNotice":"Add stuff on document ready."}');  
+    res.send(tempData.makeInitialHeaderJson());  
+});
+
+app.get('/study', function(req, res) {
+    //NOTE - this will come from db
+    res.send(tempData.makeStudyJson());
 });
 
 app.get('/user', function(req, res) {
     //NOTE - this will come from db
-    res.send('{"name":"Mark Olson","city":"Mexico SD","state":"","country":"Mexico","organization":"Universidad Nacional Autonama de Mexico","email":"","researchInterests":["Moringa","Protein","Trees shaped like broccoli"],"currentStudies":["Effects of Moringa oleifera leaves on cattle’s daily milk production"],"pastStudies":["A test of social marketing the dietary use of Moringa oleifera leaves among rual people in Orissa, India"]}');
+    res.send(tempData.makeUserProfileJson());
+});
+
+app.get('/updates', function(req, res) {
+    //NOTE - this will come from db
+    res.send(tempData.makeStudyUpdatesJson());
+});
+
+app.get('/results', function(req, res) {
+    //NOTE - this will come from db
+    res.send(tempData.makeResultsJson());
 });
 
 http.createServer(app).listen(app.get('port'), function(){
