@@ -38,28 +38,43 @@ app.get('/users', user.list);
 
 app.get('/home', function(req, res) {
     //NOTE - this will come from db
-    res.send(tempData.makeInitialHeaderJson());  
+    if(req.xhr) {
+        res.send(tempData.makeInitialHeaderJson());  
+    }
 });
 
 app.get('/study', function(req, res) {
     //NOTE - this will come from db
-    res.send(tempData.makeStudyJson());
+    if(req.xhr) {
+        res.send(tempData.makeStudyJson());
+    }
 });
 
 app.get('/user', function(req, res) {
     //NOTE - this will come from db
-    res.send(tempData.makeUserProfileJson());
+    if(req.xhr) {
+        res.send(tempData.makeUserProfileJson());
+    }
 });
 
 app.get('/updates', function(req, res) {
     //NOTE - this will come from db
-    res.send(tempData.makeStudyUpdatesJson());
+    if(req.xhr) {
+        res.send(tempData.makeStudyUpdatesJson());
+    }
 });
 
 app.get('/results', function(req, res) {
     //NOTE - this will come from db
-    res.send(tempData.makeResultsJson());
+    if(req.xhr) {
+        res.send(tempData.makeResultsJson());
+    }
 });
+
+//The 404 Route (ALWAYS Keep this as the last route)
+//app.get('*', function(req, res){
+//  res.send('Page Not Found', 404);
+//});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

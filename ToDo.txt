@@ -1,6 +1,8 @@
 To Do
 
-- Updates
+- fix bad length loops for updates
+- review all against wireframe
+- Switch all hX to divs and do basic css
 
 - bootstrap css
 - role-based css
@@ -8,6 +10,6 @@ To Do
 - REST simulated both ways
   - user types in url - goes to index.html with the correct initiation
   - internal nav forces url to change
-  - ?cookie crumbs (not unleass requested in design)
+  - ?cookie crumbs (only if requested in design)
   
   

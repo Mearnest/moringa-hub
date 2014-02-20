@@ -9,9 +9,10 @@ exports.makeInitialHeaderJson = function() {
 var initialContent = {};
 
 initialContent.header = "Moringa Hub";
-initialContent.subHeader = "This is the main body</h4>";
-initialContent.bigNotice = "Add stuff on document ready.";
+initialContent.subHeader = "A tool for Moringa Scholars to collaborate...</h4>";
+initialContent.bigNotice = "Calls for Studies & Studies in Progress";
 
+initialContent.studyList = ["Protein quality and content in Moringa oleifera leaves"];
 //console.log(JSON.stringify(initialContent));
 return initialContent;
 

@@ -10,3 +10,9 @@ a {
 div.container {
   border: 1px dashed;
 }
+
+.updateListPhotos, .userListPhotos {
+    
+    height: 100px;
+    width: 100px;
+}
