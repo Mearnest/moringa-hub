@@ -17,7 +17,8 @@ $(function() {
     function createEventHandlers() {
 
         $("#makeStudy").on("click", function() {            
-            requestContent("study");             
+            // requestContent("study");             
+            requestContent("studyAll");             
         });
         
         $("#goHome").on("click", function() {            
@@ -87,6 +88,31 @@ $(function() {
     
     
     createContent["study"] = function(study) {
+        
+        var c = [];
+        
+        currStudy = study;
+
+        //NAV
+        c.push("<input type='button' id='goHome' value='home'></input>");
+        c.push("<input type='button' id='makeUserProfile' value='user profiles'></input>");
+        c.push("<input type='button' id='makeUpdates' value='updates'></input>");
+        c.push("<input type='button' id='makeResults' value='results'></input>");
+        
+        //BODY
+        c.push("<br/><br/>");
+        c.push("<img src='/images/" +  study.photo + "'></img>");
+        c.push("<h4>" + study.name + "</h4>");
+        c.push("<div>" + study.desc + "</div>");        
+                
+        
+        $(".container").html(c.join(''));        
+
+        createEventHandlers();
+        
+    };
+    
+    createContent["studyAll"] = function(study) {
         
         var c = [];
         
