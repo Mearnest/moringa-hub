@@ -8,11 +8,25 @@ a {
 }
 
 div.container {
-  border: 1px dashed;
+
 }
 
-.updateListPhotos, .userListPhotos {
-    
+.userPanel{
+
+    height: 100px;
+    margin-top: 10px;
+}
+
+.updateListPhotos, .userListPhotos, .studyPhotos {
+    float: left;
+    margin-right: 10px;
     height: 100px;
     width: 100px;
+}
+
+.blueLink {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+    
 }

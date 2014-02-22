@@ -3,6 +3,7 @@ $(function() {
     //globals
     
     //current json objects
+    var currHome = {};
     var currUserSet = {};
     var currStudy = {};    
     var currResults = {};
@@ -10,169 +11,210 @@ $(function() {
     
     
     $(document).ready(function() { 
-        requestContent("home");        
+        requestContent(function() {
+            launchStudyAll();
+        });  //fill data objects      
     });
 
     
     function createEventHandlers() {
-
+        
         $("#makeStudy").on("click", function() {            
-            // requestContent("study");             
-            requestContent("studyAll");             
+            launchStudyAll();                         
         });
         
         $("#goHome").on("click", function() {            
-            requestContent("home");             
+            createContent["home"]("container");             
         });
         
         $("#goToUsers").on("click", function() {            
-            createContent["user"]();        
+            createContent["user"]("container");        
         });        
         
         $("#makeUserProfile").on("click", function() {            
-            requestContent("user");             
+            createContent["user"]("container");             
         });
         
         $(".UserReadMore").on("click", function() {
-            var idx = $(this).attr("id").substring(9);
-            createContent["user"](null, idx);
+            var idx = $(this).attr("id").substring(2);
+            createContent["user"]("container", idx);
         });
         
         $("#makeUpdates").on("click", function() {
-            requestContent("updates");
+            createContent["updates"]("container");
         });
         
         $(".UpdateReadMore").on("click", function() {
-            var idx = $(this).attr("id").substring(9);
-            createContent["updates"](null, idx);
+            var idx = $(this).attr("id").substring(2);
+            createContent["updates"]("container", idx);
         });        
         
         $("#makeResults").on("click", function() {
-            requestContent("results");
+            createContent["results"]("container");
         });
         
     }
     
-    function requestContent(path) {
-        //path must match a path in app.js and a createContent here 
-//console.log("requesting", path);
-        $.getJSON( path, function( data ) {
-//console.log("received", data);
-            createContent[path](data);
-            
+    
+    function launchStudyAll() {
+
+     
+        
+        
+        //create sub containers
+        c = [];
+        
+        c.push("<div class='row'>");
+        c.push("<div class='col-md-6' id='sub_container0'></div>");
+        c.push("<div class='col-md-6' id='sub_container1'></div>");
+        c.push("</div>");
+        
+        c.push("<div class='row'>");
+        c.push("<div class='row'>");
+        c.push("<div class='col-md-6' id='sub_container2'></div>");
+        c.push("<div class='col-md-6' id='sub_container3'></div>");
+        c.push("</div>");
+        
+        $("#container").html(c.join(''));
+        
+        //create content
+        
+        createContent["user"]("sub_container0");
+        createContent["updates"]("sub_container1", -1); 
+        createContent["study"]("sub_container2");
+        createContent["results"]("sub_container3");
+        
+        
+    }
+    
+    function requestContent(callback) {
+        
+        $.getJSON("home", function( data ) {
+            currHome = data;            
         });
+        $.getJSON("study", function( data ) {
+            currStudy = data;            
+        });        
+        $.getJSON("user", function( data ) {
+            currUserSet = data;            
+        });        
+        $.getJSON("updates", function( data ) {
+            currUpdateSet = data;            
+        });        
+        $.getJSON("results", function( data ) {
+            currResults = data; 
+            
+            callback(); 
+            
+            createNav();
+            
+            createEventHandlers();
                     
-    }    
+        });
+        
+        
+                    
+    } 
+    
+    
+    function createNav() {
+        
+
+        
+        var c = [];
+        
+        c.push("<input type='button' id='makeStudy' value='Go To Study'></input>");
+
+        c.push("<input type='button' id='goHome' value='home'></input>");
+        c.push("<input type='button' id='makeUserProfile' value='user profiles'></input>");
+        c.push("<input type='button' id='makeUpdates' value='updates'></input>");
+        c.push("<input type='button' id='makeResults' value='results'></input>");
+
+        //NAV
+
+        
+        $("#nav").html(c.join(''));       
+    }
     
     
     var createContent = {};
     
-    createContent["home"] = function(initialContent) {
+    createContent["home"] = function(containerName) {
         
         var c = [];
-
         
-        //NAV
-        
-        c.push("<h1>" + initialContent.header + "</h1>");
-        c.push("<h4>" + initialContent.subHeader + "</h4>");
-        c.push("<h2>" + initialContent.bigNotice + "</h2>");        
-        c.push("<div>" + initialContent.studyList[0] + "</div>"); 
-        c.push("<input type='button' id='makeStudy' value='Go To Study'></input>");
-        
-        $(".container").html(c.join(''));        
+        c.push("<h1>" + currHome.header + "</h1>");
+        c.push("<h4>" + currHome.subHeader + "</h4>");
+        c.push("<h2>" + currHome.bigNotice + "</h2>");        
+        c.push("<div>" + currHome.studyList[0] + "</div>"); 
+                
+        $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
         
     }
     
     
-    createContent["study"] = function(study) {
+    createContent["study"] = function(containerName, ctx) {
         
         var c = [];
         
-        currStudy = study;
-
-        //NAV
-        c.push("<input type='button' id='goHome' value='home'></input>");
-        c.push("<input type='button' id='makeUserProfile' value='user profiles'></input>");
-        c.push("<input type='button' id='makeUpdates' value='updates'></input>");
-        c.push("<input type='button' id='makeResults' value='results'></input>");
+        
         
         //BODY
-        c.push("<br/><br/>");
-        c.push("<img src='/images/" +  study.photo + "'></img>");
-        c.push("<h4>" + study.name + "</h4>");
-        c.push("<div>" + study.desc + "</div>");        
+        c.push("<h3>About this Study</h3>");
+        c.push("<div>" + currStudy.name + "</div>");
+        c.push("<img src='/images/" +  currStudy.photo + "' class='studyPhotos'></img>");        
+        c.push("<div>" + currStudy.desc.substring(0,100) + "</div>");        
                 
         
-        $(".container").html(c.join(''));        
+        $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
         
     };
     
-    createContent["studyAll"] = function(study) {
-        
-        var c = [];
-        
-        currStudy = study;
-
-        //NAV
-        c.push("<input type='button' id='goHome' value='home'></input>");
-        c.push("<input type='button' id='makeUserProfile' value='user profiles'></input>");
-        c.push("<input type='button' id='makeUpdates' value='updates'></input>");
-        c.push("<input type='button' id='makeResults' value='results'></input>");
-        
-        //BODY
-        c.push("<br/><br/>");
-        c.push("<img src='/images/" +  study.photo + "'></img>");
-        c.push("<h4>" + study.name + "</h4>");
-        c.push("<div>" + study.desc + "</div>");        
-                
-        
-        $(".container").html(c.join(''));        
-
-        createEventHandlers();
-        
-    };
-    
-    createContent["updates"] = function(updateSet, update_id) {
-
-        if(updateSet) {
-            currUpdateSet = updateSet;
-        }
+    createContent["updates"] = function(containerName, update_id) {
                 
         var c = []; 
         
-        //NAV
-        c.push("<input type='button' id='goHome' value='home'></input>");       
-        c.push("<input type='button' id='makeStudy' value='study'></input>");
-        
         //BODY
-        c.push("<br/><br/>");
-        c.push("<div>Updates</div>");
+        c.push("<h3>Updates</h3>");
+        
+        
         
         if(update_id) {
             
-            //request is for a single update
-            
-            c.push("<img src='/images/" +  currUpdateSet.updates[update_id].photo + "'></img>");
-            c.push("<div>" + currUpdateSet.updates[update_id].subject + "</div>");
-            c.push("<div>" + currUpdateSet.updates[update_id].date + "</div>");
-            c.push("<div>" + currUpdateSet.updates[update_id].desc + "</div>");
-            
-            
-            for(var i = 0; i < currUpdateSet.updates[update_id].comments.length; i++) {
+            if(update_id == -1) {
+                //request is for short list
                 
-                c.push("<br/><br/>");
-                c.push("<div>" + currUpdateSet.updates[update_id].comments[i].subject + "</div>");
-                c.push("<div>" + currUpdateSet.updates[update_id].comments[i].userName + "</div>");
-                c.push("<div>" + currUpdateSet.updates[update_id].comments[i].date + "</div>");
-                c.push("<div>" + currUpdateSet.updates[update_id].comments[i].text + "</div>");                
+                for(var i = 0; i <currUpdateSet.updates.length; i++) {
+                    c.push("<br/><br/>");
+
+                    c.push("<div>" + currUpdateSet.updates[i].subject + "</div>");
                 
-            }
+                }
+                
+            } else {
             
+                //request is for a single update
+                
+                c.push("<img src='/images/" +  currUpdateSet.updates[update_id].photo + "'></img>");
+                c.push("<div>" + currUpdateSet.updates[update_id].subject + "</div>");
+                c.push("<div>" + currUpdateSet.updates[update_id].date + "</div>");
+                c.push("<div>" + currUpdateSet.updates[update_id].desc + "</div>");
+                
+                
+                for(var i = 0; i < currUpdateSet.updates[update_id].comments.length; i++) {
+                    
+                    c.push("<br/><br/>");
+                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].subject + "</div>");
+                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].userName + "</div>");
+                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].date + "</div>");
+                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].text + "</div>");                
+                    
+                }
+            }    
             
         } else {   
         
@@ -185,68 +227,65 @@ $(function() {
                 c.push("<div>" + currUpdateSet.updates[i].subject + "</div>");
                 c.push("<div>" + currUpdateSet.updates[i].date + "</div>");
                 c.push("<div>" + currUpdateSet.updates[i].desc.substring(0, 100) + "</div>");
-                c.push("<input type='button' class='UpdateReadMore' id='readMore_" + i + "' value='read more...'></input>");
+                c.push("<input type='button' class='UpdateReadMore' id='P_" + i + "' value='read more...'></input>");
             }
             
         }
         
         
-        $(".container").html(c.join(''));        
+        $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
     };    
         
         
-    createContent["results"] = function(results) {
-
-        currResults = results;
+    createContent["results"] = function(containerName, ctx) {
         
         var c = [];
-
-        //NAV
-        c.push("<input type='button' id='goHome' value='home'></input>");
-        c.push("<input type='button' id='makeStudy' value='study'></input>");
-                
+             
         //BODY
-        c.push("<div>Results</div>");
+        c.push("<h3>Results</h3>");
         
-        c.push("<br/><br/>");
-        c.push("<div>" + results.desc + "</div>");
-        
-        for(var i = 0; i < results.photos.length; i++) {
-            c.push("<img src='/images/" +  results.photos[i] + "'></img>");
-        }
-        
-        for(var i = 0; i < results.comments.length; i++) {
+        if(ctx == 1) {
+            //show full
+            c.push("<div>" + currResults.desc.substring(0,200) + "</div>");
+                
+            for(var i = 0; i < currResults.photos.length; i++) {
+                c.push("<img src='/images/" +  currResults.photos[i] + "'></img>");
+            }
+            
+            for(var i = 0; i < currResults.comments.length; i++) {
+                c.push("<br/><br/>");
+                c.push("<div>" + currResults.comments[i].subject + "</div>");
+                c.push("<div>" + currResults.comments[i].userName + "</div>");
+                c.push("<div>" + currResults.comments[i].date + "</div>");
+                c.push("<div>" + currResults.comments[i].text + "</div>");
+            
+            } 
+            
+        } else {
+            //show abbreviated
             c.push("<br/><br/>");
-            c.push("<div>" + results.comments[i].subject + "</div>");
-            c.push("<div>" + results.comments[i].userName + "</div>");
-            c.push("<div>" + results.comments[i].date + "</div>");
-            c.push("<div>" + results.comments[i].text + "</div>");
+            c.push("<div>" + currResults.desc.substring(0,200) + "</div>");
+        
+        
+
             
             
         }        
         
         
         
-        $(".container").html(c.join(''));        
+        $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
         
     };   
         
     
-    createContent["user"] = function(userSet, user_id) {
-        
-        if(userSet) {
-            currUserSet = userSet;
-        }
+    createContent["user"] = function(containerName, user_id) {
         
         var c = [];
-        
-        //NAV
-        c.push("<input type='button' id='goHome' value='home'></input>");
-        c.push("<input type='button' id='makeStudy' value='study'></input>");
         
         if(user_id) {
             //request for single user - build single profile            
@@ -294,22 +333,29 @@ $(function() {
                 //retain the userlist to avoid fetching again in future
                 currUserSet = userSet;                
             }
+            
+            c.push("<h3>Researchers</h3>");
                
             for(var i = 0; i < currUserSet.userProfiles.length; i++) {
             
-                c.push("<br/><br/>");
+                c.push("<div class='userPanel'>");
                 c.push("<img class='userListPhotos' src='/images/" +  currUserSet.userProfiles[i].photo + "'></img>");
-                c.push("<h4>" + currUserSet.userProfiles[i].name + "</h4>");
-                c.push("<div>" + currUserSet.userProfiles[i].city + "</div>");
+                c.push("<div>" + currUserSet.userProfiles[i].name + "</div>");
+                c.push("<div>" + currUserSet.userProfiles[i].city + "," + currUserSet.userProfiles[i].state + "</div>");
                 c.push("<div>" + currUserSet.userProfiles[i].country + "</div>");
-                c.push("<input type='button' class='UserReadMore' id='readMore_" + i + "' value='read more...'></input>");
+                c.push("<div>");
+                c.push("<span class='blueLink UserReadMore' id='U_" + i + "'>Profile</span>");
+                c.push("<span>  |  </span>");
+                c.push("<span class='blueLink UserEmail' id='U_" + i + "'>Email</span>");
+                c.push("</div>");
+                c.push("</div>");
                 
                 
             }
             
         }
 
-        $(".container").html(c.join(''));  
+        $("#" + containerName).html(c.join(''));  
         
         createEventHandlers();
         

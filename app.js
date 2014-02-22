@@ -34,7 +34,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+//app.get('/users', user.list);
 
 app.get('/home', function(req, res) {
     //NOTE - this will come from db
