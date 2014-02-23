@@ -62,12 +62,18 @@ app.get('/updates', function(req, res) {
     if(req.xhr) {
         res.send(tempData.makeStudyUpdatesJson());
     }
+    else {
+        res.json(tempData.makeStudyUpdatesJson());
+    }
 });
 
 app.get('/results', function(req, res) {
     //NOTE - this will come from db
     if(req.xhr) {
         res.send(tempData.makeResultsJson());
+    }
+    else {
+        res.json(tempData.makeResultsJson());
     }
 });
 

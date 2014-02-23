@@ -80,11 +80,15 @@ studyUpdates.updates[0].date = "Aug 30, 2006";
 studyUpdates.updates[0].photo = "moringa_harvested.jpg";
 studyUpdates.updates[0].desc = "We planted the Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.";
 
+studyUpdates.updates[0].comments = [];
+
 studyUpdates.updates[1] = {};
 studyUpdates.updates[1].subject = "Progress of Moringa growth";  
 studyUpdates.updates[1].date = "Aug 20, 2006";
 studyUpdates.updates[1].photo = "progress_of_moringa.jpg";
 studyUpdates.updates[1].desc = "The Moringa is growing Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
+
+studyUpdates.updates[1].comments = [];
 
 studyUpdates.updates[2] = {};
 studyUpdates.updates[2].subject = "Moringa planted today";  
@@ -107,6 +111,13 @@ studyUpdates.updates[2].comments[1].subject = "Measurements";
 studyUpdates.updates[2].comments[1].userName = "Jed Fahey";
 studyUpdates.updates[2].comments[1].date = "Aug 16, 2006";
 studyUpdates.updates[2].comments[1].text = "Phasellus auctor vulputate ante. Sed at ipsum. Cras purus. Pellentesque vestibulum nisi a enim. Duis rutrum condimentum enim. Cras sed urna. Vivamus dictum ipsum ut felis. ";
+
+studyUpdates.updates[2].comments[2] = {};
+studyUpdates.updates[2].comments[2].hierarchy = 1.2;
+studyUpdates.updates[2].comments[2].subject = "Measurements";
+studyUpdates.updates[2].comments[2].userName = "Mark Earnest";
+studyUpdates.updates[2].comments[2].date = "May 8th, 2007";
+studyUpdates.updates[2].comments[2].text = "Phasellus auctor vulputate ante. Sed at ipsum. Cras purus. Pellentesque vestibulum nisi a enim. Duis rutrum condimentum enim. Cras sed urna. Vivamus dictum ipsum ut felis. ";
 
 //console.log(JSON.stringify(studyUpdates));    
 return studyUpdates; 
