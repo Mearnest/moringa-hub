@@ -206,45 +206,55 @@ $(function() {
         var c = []; 
         
         //BODY
-        c.push("<h3><span class='label label-success'>Updates</span></h3>");
         
         if(update_id || update_id === 0) { // falsey if update id is 0
             
+            
             if(update_id == -1) {
                 //request is for short list
+                c.push("<h3><span class='label label-success'>Updates</span></h3>");
                 
                 for(var i = 0; i <currUpdateSet.updates.length; i++) {
                     c.push("<br/><br/>");
-                    c.push("<div>" + currUpdateSet.updates[i].subject + "</div>");
+                    c.push("<div><span class = 'blueLink UpdateReadMore' id='U_" + i + "'>" + currUpdateSet.updates[i].subject + "</span></div>");
                 }
                 
             } else {
-            
+                c.push("<h3><span class='label label-success'>Update</span></h3>");
+                
                 //request is for a single update
                 
-                c.push("<img src='/images/" +  currUpdateSet.updates[update_id].photo + "'></img>");
-                c.push("<div>" + currUpdateSet.updates[update_id].subject + "</div>");
-                c.push("<div>" + currUpdateSet.updates[update_id].date + "</div>");
-                c.push("<div>" + currUpdateSet.updates[update_id].desc + "</div>");
+                c.push("<div class='wrapper'>");
                 
+                    c.push("<img src='/images/" +  currUpdateSet.updates[update_id].photo + "' class='pull-left'></img>");
+                    c.push("<div class='update'><strong>" + currUpdateSet.updates[update_id].subject + "</strong></div>");
+                    c.push("<div class='update'>" + currUpdateSet.updates[update_id].date + "</div>");
+                    c.push("<div class='update'>" + currUpdateSet.updates[update_id].desc + "</div>");
+                    
+                c.push("</div><!-- /.wrapper -->");
+                c.push("<div class='clearfix'></div>");
+                
+                c.push("<h3 class='comments'><span class='label label-primary'>Comments</span></h3>");
                 for(var i = 0; i < currUpdateSet.updates[update_id].comments.length; i++) {
-                    c.push("<br/><br/>");
-                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].subject + "</div>");
-                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].userName + "</div>");
-                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].date + "</div>");
-                    c.push("<div>" + currUpdateSet.updates[update_id].comments[i].text + "</div>");                
+                    c.push("<div class='comments'>");
+                        c.push("<div><strong>" + currUpdateSet.updates[update_id].comments[i].subject + "</strong></div>");
+                        c.push("<div>By " + currUpdateSet.updates[update_id].comments[i].userName);
+                        c.push(" | " + currUpdateSet.updates[update_id].comments[i].date + "</div>");
+                        c.push("<div>" + currUpdateSet.updates[update_id].comments[i].text + "</div>");
+                    c.push("</div>");
                 }
             }    
             
         } else {   
         
             //request is for entire list
+            c.push("<h3><span class='label label-success'>Updates</span></h3>");
             
             for(var i = 0; i <currUpdateSet.updates.length; i++) {
                 c.push("<div class='wrapper'>");
                 
                     c.push("<img class='updateListPhotos' src='/images/" +  currUpdateSet.updates[i].photo + "'></img>");
-                    c.push("<div>" + currUpdateSet.updates[i].subject + "</div>");
+                    c.push("<div><strong>" + currUpdateSet.updates[i].subject + "</strong></div>");
                     c.push("<div>" + currUpdateSet.updates[i].date + "</div>");
                     c.push("<div>" + currUpdateSet.updates[i].desc.substring(0, 100) + "</div>");
                     c.push("<input type='button' class='UpdateReadMore' id='P_" + i + "' value='read more...'></input>");

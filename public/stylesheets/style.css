@@ -12,6 +12,10 @@ h1, h2, h3 {
     margin-bottom: 20px;
 }
 
+h4.comments {
+    margin: 20px 0 10px 0;
+}
+
 .blueLink {
     cursor: pointer;
     text-decoration: underline;
@@ -26,6 +30,10 @@ div.container {
 
 }
 
+.update, .comments {
+    margin-bottom: 10px;
+}
+
 .col-md-6 {
     xborder: 1px solid;
 }
@@ -36,7 +44,7 @@ div.container {
 }
 
 img.pull-left {
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .studies {
