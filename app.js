@@ -34,7 +34,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res) {
-    res.render('index.html');
+    // res.render('index.html');
+    // The front view for the study is the "home" view right now, so load it.
+    res.render('index', { title: 'Moringa Hub (index.ejs)', data: "", loadView: 'launchStudyAll(); setHistory("launchStudyAll");' });
 });
 //app.get('/users', user.list);
 

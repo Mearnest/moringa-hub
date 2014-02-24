@@ -24,11 +24,23 @@ $(function() {
             // If the user is linking to a specific part of the SPA, load that view.
             console.log(loadView);
             
-            if (loadView) {
-                loadView();
+            try {
+                if (loadView) {
+                    loadView();
+                }
+                else {
+                    launchStudyAll();
+                    setHistory("launchStudyAll");
+                }
             }
-            else {
-                launchStudyAll();
+            catch(err) {
+                console.log(err.message);
+                console.log(err.stack);
+                console.log(currHome);
+                console.log(currUserSet);
+                console.log(currStudy);
+                console.log(currResults);
+                console.log(currUpdateSet);
             }
         });  //fill data objects           
     });
@@ -126,28 +138,37 @@ $(function() {
     }
     
     function requestContent(callback) {
+        // Nest ajax calls to prevent occasional scenario where UI is loaded before all the data has returned.
+        // Causes a little bit of delay on heroku. Maybe data should be loaded with one call instead.
+        
         $.getJSON("/home", function( data ) {
-            currHome = data;            
+            currHome = data;
+            console.log("home data fetched");
+            
+            $.getJSON("/study", function( data ) {
+                currStudy = data;  
+                console.log("study data fetched");   
+                 
+                 $.getJSON("/user", function( data ) {
+                    currUserSet = data;  
+                    console.log("user data fetched");   
+
+                     $.getJSON("/updates", function( data ) {
+                        currUpdateSet = data;
+                        console.log("update data fetched");
+                        
+                        $.getJSON("/results", function( data ) {
+                            currResults = data; 
+                            console.log("results data fetched");
+                            
+                            callback(); 
+                            createNav();
+                            createEventHandlers();    
+                        });           
+                    });   
+                });   
+            });  
         });
-        $.getJSON("/study", function( data ) {
-            currStudy = data;            
-        });        
-        $.getJSON("/user", function( data ) {
-            currUserSet = data;            
-        });        
-        $.getJSON("/updates", function( data ) {
-            currUpdateSet = data;
-        });        
-        $.getJSON("/results", function( data ) {
-            currResults = data; 
-            
-            callback(); 
-            
-            createNav();
-            
-            createEventHandlers();
-                    
-        });           
     } 
     
     
@@ -303,7 +324,7 @@ $(function() {
         
     
     createContent["user"] = function(containerName, user_id) {
-        console.log(containerName, user_id);
+        // console.log(containerName, user_id);
         
         var c = [];
         
