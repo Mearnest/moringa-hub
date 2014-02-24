@@ -24,7 +24,7 @@ exports.makeStudyJson = function() {
 
 var study = {};
 
-study.name ="Study: Protein quality and content in Moringa oleifera leaves";
+study.name ="Protein quality and content in Moringa oleifera leaves";
 study.desc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt, dolor in convallis placerat, quam eros rhoncus erat, at sodales purus velit non metus. Aenean lacinia facilisis metus et condimentum. \n Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ac sagittis arcu. Suspendisse vel tincidunt libero.";
 study.photo = "study_photo.jpg"; 
     
@@ -69,10 +69,11 @@ return results;
 };
 
 
-exports.makeStudyUpdatesJson = function() {   
+exports.makeStudyUpdatesJson = function(id) {   
 
 var studyUpdates = {};
 studyUpdates.updates = [];
+
 studyUpdates.updates[0] = {};
     
 studyUpdates.updates[0].subject = "Moringa harvested first time";  
@@ -120,12 +121,15 @@ studyUpdates.updates[2].comments[2].date = "May 8th, 2007";
 studyUpdates.updates[2].comments[2].text = "Phasellus auctor vulputate ante. Sed at ipsum. Cras purus. Pellentesque vestibulum nisi a enim. Duis rutrum condimentum enim. Cras sed urna. Vivamus dictum ipsum ut felis. ";
 
 //console.log(JSON.stringify(studyUpdates));    
+if (id) {
+    return studyUpdates.updates[id];
+}
 return studyUpdates; 
-    
+
 };
 
 
-exports.makeUserProfileJson = function() {
+exports.makeUserProfileJson = function(id) {
 
 var userProfileSet = {};
 userProfileSet.userProfiles = [];
@@ -167,6 +171,9 @@ userProfileSet.userProfiles.push(userProfile2);
     
     
 //console.log(JSON.stringify(userProfileSet));
+if (id) {
+    return userProfileSet.userProfiles[id];
+}
 return userProfileSet;
     
 };

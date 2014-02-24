@@ -1,15 +1,5 @@
-// Truly Global
-var loadView;
-var loadViewData;  // Might need to load data matching the url as app becomes more data intensive.
-
-// Evil extension of native object, thus the check first.
-if (!String.prototype.capitalize) {
-    String.prototype.capitalize = function() {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    }
-}
-
 $(function() {
+  
     //globals
     
     //current json objects
@@ -19,17 +9,10 @@ $(function() {
     var currResults = {};
     var currUpdateSet = {};
     
+    
     $(document).ready(function() { 
         requestContent(function() {
-            // If the user is linking to a specific part of the SPA, load that view.
-            console.log(loadView);
-            
-            if (loadView) {
-                loadView();
-            }
-            else {
-                launchStudyAll();
-            }
+            launchStudyAll();      
         });  //fill data objects           
     });
 
@@ -40,60 +23,51 @@ $(function() {
 
         $("#makeStudy").off("click");
         $("#makeStudy").on("click", function() {            
-            launchStudyAll();
-            setHistory("launchStudyAll");
+            launchStudyAll();                         
         }); 
         
         $(".makeStudy").off("click");
         $(".makeStudy").on("click", function() {     
             var idx = $(this).attr("id").substring(2);        
-            launchStudyAll(idx);
-            setHistory("launchStudyAll", idx);            
+            launchStudyAll(idx);                         
         });
         
         $("#goHome").off("click");
         $("#goHome").on("click", function() {            
-            createContent["home"]("container"); 
-            setHistory("home");            
+            createContent["home"]("container");             
         });
         
         $("#goToUsers").off("click");
         $("#goToUsers").on("click", function() {            
-            createContent["user"]("container");
-            setHistory("user");            
+            createContent["user"]("container");        
         });        
         
         $("#makeUserProfile").off("click");
         $("#makeUserProfile").on("click", function() {            
-            createContent["user"]("container"); 
-            setHistory("user");            
+            createContent["user"]("container");             
         });
         
         $(".UserReadMore").off("click");
         $(".UserReadMore").on("click", function() {
             var idx = $(this).attr("id").substring(2);
             createContent["user"]("container", idx);
-            setHistory("user", idx);
         });
         
         $("#makeUpdates").off("click");
         $("#makeUpdates").on("click", function() {
             createContent["updates"]("container");
-            setHistory("updates");
         });
         
         $(".UpdateReadMore").off("click");
         $(".UpdateReadMore").on("click", function() {
             var idx = $(this).attr("id").substring(2);
             createContent["updates"]("container", idx);
-            setHistory("updates", idx);
         });        
         
         $("#makeResults").off("click");
         $("#makeResults").on("click", function() {
             var showAll = true;
             createContent["results"]("container", showAll);
-            setHistory("results", showAll);
         });
         
     }
@@ -126,19 +100,19 @@ $(function() {
     }
     
     function requestContent(callback) {
-        $.getJSON("/home", function( data ) {
+        $.getJSON("home", function( data ) {
             currHome = data;            
         });
-        $.getJSON("/study", function( data ) {
+        $.getJSON("study", function( data ) {
             currStudy = data;            
         });        
-        $.getJSON("/user", function( data ) {
+        $.getJSON("user", function( data ) {
             currUserSet = data;            
         });        
-        $.getJSON("/updates", function( data ) {
+        $.getJSON("updates", function( data ) {
             currUpdateSet = data;
         });        
-        $.getJSON("/results", function( data ) {
+        $.getJSON("results", function( data ) {
             currResults = data; 
             
             callback(); 
@@ -165,8 +139,8 @@ $(function() {
         $("#nav").html(c.join(''));       
     }
     
-    // var createContent = {};
-    window.createContent = {};  // Bad, but need hook inside closure to execute global loadView populated from app.js.
+    
+    var createContent = {};
     
     createContent["home"] = function(containerName) {
         var c = [];
@@ -185,6 +159,7 @@ $(function() {
         $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
+        
     }
     
     
@@ -200,6 +175,7 @@ $(function() {
         $("#" + containerName).html(c.join(''));        
 
         createEventHandlers();
+        
     };
     
     createContent["updates"] = function(containerName, update_id) {
@@ -208,7 +184,7 @@ $(function() {
         //BODY
         c.push("<h3><span class='label label-success'>Updates</span></h3>");
         
-        if(update_id || update_id === 0) { // falsey if update id is 0
+        if(update_id) {
             
             if(update_id == -1) {
                 //request is for short list
@@ -251,7 +227,9 @@ $(function() {
                 
                 c.push("</div><!-- /.wrapper -->");
             }
+            
         }
+        
         
         $("#" + containerName).html(c.join(''));        
 
@@ -279,6 +257,7 @@ $(function() {
                 c.push("<div>" + currResults.comments[i].userName + "</div>");
                 c.push("<div>" + currResults.comments[i].date + "</div>");
                 c.push("<div>" + currResults.comments[i].text + "</div>");
+            
             } 
             
         } else {
@@ -289,15 +268,14 @@ $(function() {
         
         $("#" + containerName).html(c.join(''));        
         // createEventHandlers();
+        
     };   
         
     
     createContent["user"] = function(containerName, user_id) {
-        console.log(containerName, user_id);
-        
         var c = [];
         
-        if(user_id || user_id === 0) { // falsey if user id is 0
+        if(user_id) {
             //request for single user - build single profile            
             //NAV
             //c.push("<input type='button' id='goToUsers' value='users'></input>");
@@ -342,6 +320,7 @@ $(function() {
                 }
            c.push("</div>");
           
+            
         } else {
             
             //request for list of users
@@ -375,45 +354,6 @@ $(function() {
         
         createEventHandlers();
     }
-    
-    // Set the URL as the user loads new data/views or navigates back
-    function setHistory(view, idx) {
-    	if (window.history.pushState) {
-            // showStudyAll or front view for a study needs to be handled diffrently right now.
-            if (view === "launchStudyAll") {
-                var title = "Moringa Hub";
-                var route = "/";
-            }
-            else {
-                var title = view.capitalize();
-                var route = "/" + view;
-                if (idx && idx !== true) {
-                    route = route + "/" + idx;
-                }
-            }
-            
-            var objState = { "view": view, 'title': title, 'idx': idx }; 
-            document.title = title;  // Update page's title as the user loads new content
-            
-            console.log(objState);
-            
-            window.history.pushState(objState, title, route);
-        }
-    }
-    
-    window.onpopstate = function(event) {
-		if (event.state) {
-			console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
-            document.title = event.state.title;
-            
-            if (event.state.view === "launchStudyAll") {
-                launchStudyAll(event.state.idx);
-            }
-            else {
-                createContent[event.state.view]("container", event.state.idx);
-            }
-		}
-	}
     
 });
 
